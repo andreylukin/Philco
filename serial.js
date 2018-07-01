@@ -2,16 +2,17 @@ const SpotifyApi = require("./src/models/SpotifyAPI");
 
 
 const spotifyApi = new SpotifyApi();
+let stationCount = 0; 
 try {
     (async () => {
       await spotifyApi.authenticate();
+      stationCount = await spotifyApi.getNumberofPlaylist();
     })().then(console.log)
         .catch(console.log);
   } catch (e) {
     console.log(e.toString());
 }
-var stationCount = 5;
-
+console.log(stationCount);
 const SerialPort = require('serialport');
 const parsers = SerialPort.parsers;
 
@@ -19,7 +20,7 @@ const parser = new parsers.Readline({
   delimiter: '\r\n'
 });
 
-const port = new SerialPort('/dev/ttyUSB0' , {
+const port = new SerialPort('/dev/tty.Bluetooth-Incoming-Port', {
   baudRate: 115200
 });
 
@@ -89,6 +90,7 @@ function checkIfShuffle() {
 }
 
 function setShuffle(state) {
+  spotifyApi.shuffle();
   isShuffle = state;
 }
 
@@ -98,13 +100,14 @@ function checkStation() {
 }
 
 function setStation(state) {
+  spotifyApi.startPlaylist(state);
   station = state;
 }
 
 function skipForward() {
-  console.log("skip forward");
+  spotifyApi.next();
 }
 
 function skipBack() {
-  console.log("skip back");
+  spotifyApi.previous();
 }
