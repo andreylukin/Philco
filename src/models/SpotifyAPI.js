@@ -40,6 +40,12 @@ class SpotifyApi {
         this.startMusic(playlistURIs[number])
     }
 
+    async getNumberofPlaylist() {
+        const playlists = await this.spotifyApi.getUserPlaylists();
+        const playlistURIs = playlists.body.items.map(item => item.uri);
+        return playlistURIs.length;
+    }
+
     async next() {
         await this.spotifyApi.skipToNext();
     }
