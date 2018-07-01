@@ -20,7 +20,7 @@ const parser = new parsers.Readline({
   delimiter: '\r\n'
 });
 
-const port = new SerialPort('/dev/tty.Bluetooth-Incoming-Port', {
+const port = new SerialPort('/dev/ttyUSB0', {
   baudRate: 115200
 });
 
