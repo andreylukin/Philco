@@ -3,7 +3,6 @@ const config = require("../config/config");
 
 async function getMyDeviceId() {
     const response = await this.spotifyApi.getMyDevices();
-    console.log(response.body.devices);
     const device = response.body.devices.filter( device => device.name === "PHILCO")[0];// use "PHILCO" usually
     return device === undefined ? "Philoco aint here" : device.id;
 }
@@ -30,7 +29,7 @@ class SpotifyApi {
     async startMusic(context_uri) {
         const deviceIds = await getMyDeviceId.bind(this)();
         console.log(deviceIds);
-        await this.spotifyApi.transferMyPlayback({deviceIds})
+        await this.spotifyApi.transferMyPlayback({deviceIds: [deviceIds] })
         await this.spotifyApi.play({device_id: deviceIds, context_uri: context_uri || undefined})
     }
 
@@ -44,7 +43,6 @@ class SpotifyApi {
         const playlists = await this.spotifyApi.getUserPlaylists();
         const playlistURIs = playlists.body.items;
         this.startMusic(playlistURIs[number].uri);
-        console.log(playlistURIs[number].name);
     }
 
     async getNumberofPlaylist() {
@@ -72,13 +70,14 @@ class SpotifyApi {
 module.exports = SpotifyApi;
 
 
-const spotifyApi = new SpotifyApi();
-try {
-    (async () => {
-      await spotifyApi.authenticate();
-      stationCount = await spotifyApi.shuffle();
-    })().then(console.log)
-        .catch(console.log);
-  } catch (e) {
-    console.log(e.toString());
-}
+// const spotifyApi = new SpotifyApi();
+// try {
+//     (async () => {
+//       await spotifyApi.authenticate();
+//       const response = await spotifyApi.startPlaylist();
+//       console.log(response);
+//     })().then(console.log)
+//         .catch(console.log);
+//   } catch (e) {
+//     console.log(e.toString());
+// }
