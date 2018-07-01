@@ -9,7 +9,7 @@ try {
         .catch(console.log);
   } catch (e) {
     console.log(e.toString());
-  }
+}
 var stationCount = 5;
 
 const SerialPort = require('serialport');
@@ -68,9 +68,9 @@ function checkIfPlaying() {
 
 function setPlaying(state) {
   if(state) {
-    spotifyApi.startMusic();
+    spotifyApi.startMusic().catch(error => console.log(error));
   } else {
-    spotifyApi.stopMusic();
+    spotifyApi.stopMusic().catch(error => console.log(error));
   }
   isPlaying = state;
 }
