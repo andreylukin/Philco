@@ -55,8 +55,9 @@ class SpotifyApi {
     }
 
     async shuffle() {
-        const isShuffling = this.isShuffle();
-        await this.spotifyApi.setShuffle({state: !isShuffling});
+        const isShuffling = await this.isShuffle();
+        await this.spotifyApi.setShuffle({state: (!isShuffling).toString()});
+        console.log(`Now shuffling is ${!isShuffling}`);
     }
 
     async isShuffle() {
