@@ -8,7 +8,7 @@ async function getMyDeviceId() {
 }
 
 async function isShuffle() {
-    const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
+    const response = await this.spotifyApi.getMyCurrentPlaybackState();
     return response.body.shuffle_state;
 }
 
