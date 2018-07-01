@@ -1,4 +1,4 @@
-const SpotifyApi = require("./src/models/SpotifyApi");
+const SpotifyApi = require("./src/models/SpotifyAPI");
 
 
 const spotifyApi = new SpotifyApi();
@@ -19,7 +19,7 @@ const parser = new parsers.Readline({
   delimiter: '\r\n'
 });
 
-const port = new SerialPort('/dev/tty.usbserial-AH02LQCH', {
+const port = new SerialPort('/dev/ttyUSB0' , {
   baudRate: 115200
 });
 
