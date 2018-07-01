@@ -46,18 +46,15 @@ class SpotifyApi {
     async previous() {
         await this.spotifyApi.skipToPrevious();
     }
-    async shuffle(shouldShuffle) {
-        await this.spotifyApi.setShuffle({state: shouldShuffle});
+
+    async shuffle() {
+        const isShuffling = this.isShuffle();
+        await this.spotifyApi.setShuffle({state: !isShuffling});
     }
 
-    async isPlaying() {
+    async play() {
         const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
-        return response.body.is_playing; 
-    }
-
-    async isShuffle() {
-        const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
-        return response.body.shuffle_state; 
+        response.body.is_playing ? this.stopMusic() : this.startMusic();
     }
 }
 
