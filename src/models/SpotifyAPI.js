@@ -8,6 +8,11 @@ async function getMyDeviceId() {
     return device === undefined ? "Philoco aint here" : device.id;
 }
 
+async function isShuffle() {
+    const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
+    return response.body.shuffle_state;
+}
+
 class SpotifyApi {
     constructor() {
         this.spotifyApi = new SpotifyWebApi({
@@ -23,9 +28,10 @@ class SpotifyApi {
     }
 
     async startMusic(context_uri) {
-        const deviceId = await getMyDeviceId.bind(this)();
-        console.log(deviceId);
-        await this.spotifyApi.play({device_id: deviceId, context_uri: context_uri || undefined})
+        const deviceIds = await getMyDeviceId.bind(this)();
+        console.log(deviceIds);
+        await this.spotifyApi.transferMyPlayback({deviceIds})
+        await this.spotifyApi.play({device_id: deviceIds, context_uri: context_uri || undefined})
     }
 
     async stopMusic() {
@@ -55,21 +61,24 @@ class SpotifyApi {
     }
 
     async shuffle() {
-        const isShuffling = await this.isShuffle();
+        const isShuffling = await isShuffle.bind(this)();
         await this.spotifyApi.setShuffle({state: (!isShuffling).toString()});
         console.log(`Now shuffling is ${!isShuffling}`);
     }
 
-    async isShuffle() {
-        const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
-        return response.body.shuffle_state;
-    }
-
-    async play() {
-        const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
-        response.body.is_playing ? this.stopMusic() : this.startMusic();
-    }
 }
 
 
 module.exports = SpotifyApi;
+
+
+const spotifyApi = new SpotifyApi();
+try {
+    (async () => {
+      await spotifyApi.authenticate();
+      stationCount = await spotifyApi.shuffle();
+    })().then(console.log)
+        .catch(console.log);
+  } catch (e) {
+    console.log(e.toString());
+}
