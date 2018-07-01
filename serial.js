@@ -2,7 +2,7 @@ const SpotifyApi = require("./src/models/SpotifyAPI");
 
 
 const spotifyApi = new SpotifyApi();
-let stationCount = 2; 
+let stationCount = 2;
 try {
     (async () => {
       await spotifyApi.authenticate();
@@ -29,6 +29,9 @@ port.pipe(parser);
 port.on('open', () => console.log('opened connection to serial device'));
 
 var encoderPrev = 0;
+var shufflePrev = -1;
+var stationPrev = -1;
+var playingPrev = -1;
 
 parser.on('data', function(data) {
   var reading = new Object();
@@ -38,18 +41,28 @@ parser.on('data', function(data) {
   reading.shuffle = parseInt(fields[2],10) == 1 ? true : false;
   reading.station = Math.round(parseInt(fields[3],10)/1023*stationCount+.5);
 
-  ensureState(reading.playing, checkIfPlaying, setPlaying);
-  ensureState(reading.shuffle, checkIfShuffle, setShuffle);
-  //ensureState(reading.station, checkStation,   setStation);
-
   if(reading.encoder > encoderPrev) {
-    skipForward();
+    spotifyApi.next();
+    encoderPrev = reading.encoder;
   } else if(reading.encoder < encoderPrev) {
-    skipBack();
+    spotifyApi.previous();
+    encoderPrev = reading.encoder;
   }
 
-  if(reading.encoder != encoderPrev) {
-    encoderPrev = reading.encoder;
+  if(reading.shuffle != shufflePrev) {
+    spotifyApi.shuffle();
+    shufflePrev = reading.shuffle;
+  }
+
+
+  // if(reading.station != stationPrev) {
+  //   spotifyApi.startPlaylist(reading.station);
+  //   stationPrev = reading.station
+  // }
+
+  if(reading.playing != playingPrev) {
+    setPlaying(reading.playing);
+    playingPrev = reading.playing;
   }
 
 });
@@ -61,53 +74,10 @@ function ensureState(desiredCondition,getCurrentCondition,commandCondition) {
   }
 }
 
-var isPlaying = false; // temporary
-function checkIfPlaying() {
-  // check server : is it playing?
-  return isPlaying;
-}
-
 function setPlaying(state) {
   if(state) {
     spotifyApi.startMusic().catch(error => console.log(error));
   } else {
     spotifyApi.stopMusic().catch(error => console.log(error));
   }
-  isPlaying = state;
-}
-
-function handleRadioOnOff(state) {
-  if(state) {
-    console.log("Radio is turning on");
-  } else {
-    console.log("Radio is turning off");
-  }
-}
-
-var isShuffle = false; // temporary
-function checkIfShuffle() {
-  return isShuffle;
-}
-
-function setShuffle(state) {
-  spotifyApi.shuffle();
-  isShuffle = state;
-}
-
-var station = 1; // temporary
-function checkStation() {
-  return station;
-}
-
-function setStation(state) {
-  spotifyApi.startPlaylist(state);
-  station = state;
-}
-
-function skipForward() {
-  spotifyApi.next();
-}
-
-function skipBack() {
-  spotifyApi.previous();
 }
