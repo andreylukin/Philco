@@ -2,7 +2,7 @@ const SpotifyApi = require("./src/models/SpotifyAPI");
 
 
 const spotifyApi = new SpotifyApi();
-let stationCount = 0; 
+let stationCount = 2; 
 try {
     (async () => {
       await spotifyApi.authenticate();
@@ -40,7 +40,7 @@ parser.on('data', function(data) {
 
   ensureState(reading.playing, checkIfPlaying, setPlaying);
   ensureState(reading.shuffle, checkIfShuffle, setShuffle);
-  ensureState(reading.station, checkStation,   setStation);
+  //ensureState(reading.station, checkStation,   setStation);
 
   if(reading.encoder > encoderPrev) {
     skipForward();
