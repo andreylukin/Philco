@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/andreylukin/Philco/issues"
   },
-  "homepage": "https://github.com/andreylukin/Philco#readme"
+  "homepage": "https://github.com/andreylukin/Philco#readme",
+  "engines": {
+    "node": "9.0"
+  }
 }
