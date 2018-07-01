@@ -48,7 +48,6 @@ function ensureState(desiredCondition,getCurrentCondition,commandCondition) {
   if(desiredCondition != getCurrentCondition()) {
     commandCondition(desiredCondition);
     console.log("Set to "+desiredCondition);
-    handler(desiredCondition);
   }
 }
 
