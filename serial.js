@@ -1,6 +1,15 @@
-/* eslint-disable node/no-missing-require */
-'use strict';
+const SpotifyApi = require("./src/models/SpotifyApi");
 
+
+const spotifyApi = new SpotifyApi();
+try {
+    (async () => {
+      await spotifyApi.authenticate();
+    })().then(console.log)
+        .catch(console.log);
+  } catch (e) {
+    console.log(e.toString());
+  }
 var stationCount = 5;
 
 const SerialPort = require('serialport');
@@ -53,10 +62,16 @@ function ensureState(desiredCondition,getCurrentCondition,commandCondition) {
 
 var isPlaying = false; // temporary
 function checkIfPlaying() {
+  // check server : is it playing?
   return isPlaying;
 }
 
 function setPlaying(state) {
+  if(state) {
+    spotifyApi.startMusic();
+  } else {
+    spotifyApi.stopMusic();
+  }
   isPlaying = state;
 }
 

@@ -34,7 +34,7 @@ class SpotifyApi {
 
 }
 
-// const spotifyApi = new SpotifyApi();
+const spotifyApi = new SpotifyApi();
 
 // try {
 //     (async () => {
@@ -46,3 +46,6 @@ class SpotifyApi {
 // } catch (e) {
 //   console.log(e.toString());
 // }
+//
+
+module.exports = SpotifyApi;
