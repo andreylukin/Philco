@@ -59,6 +59,11 @@ class SpotifyApi {
         await this.spotifyApi.setShuffle({state: !isShuffling});
     }
 
+    async isShuffle() {
+        const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
+        return response.body.shuffle_state;
+    }
+
     async play() {
         const response = await spotifyApi.spotifyApi.getMyCurrentPlaybackState();
         response.body.is_playing ? this.stopMusic() : this.startMusic();
