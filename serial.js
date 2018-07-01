@@ -55,10 +55,10 @@ parser.on('data', function(data) {
   }
 
 
-  if(reading.station != stationPrev) {
-    spotifyApi.startPlaylist(reading.station);
-    stationPrev = reading.station
-  }
+  // if(reading.station != stationPrev) {
+  //   spotifyApi.startPlaylist(reading.station);
+  //   stationPrev = reading.station
+  // }
 
   if(reading.playing != playingPrev) {
     setPlaying(reading.playing);
