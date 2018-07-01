@@ -7,6 +7,7 @@ try {
     (async () => {
       await spotifyApi.authenticate();
       stationCount = await spotifyApi.getNumberofPlaylist();
+      stationCount = 2;
     })().then(console.log)
         .catch(console.log);
   } catch (e) {
