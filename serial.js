@@ -58,8 +58,8 @@ parser.on('data', function(data) {
 
 
   if(reading.station != stationPrev) {
-    console.log("Now playing from station "+reading.station);
-    spotifyApi.startPlaylist(reading.station);
+    console.log("Would be playing from station "+reading.station);
+    // spotifyApi.startPlaylist(reading.station);
     stationPrev = reading.station;
   }
 
