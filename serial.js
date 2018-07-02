@@ -42,6 +42,7 @@ parser.on('data', function(data) {
   reading.shuffle = parseInt(fields[2],10) == 1 ? true : false;
   var analogReading = parseInt(fields[3],10);
   reading.station = Math.floor(analogReading/1024*stationCount);
+  console.log("Reading station: "+reading.station);
 
   if(reading.encoder > encoderPrev) {
     spotifyApi.next();
